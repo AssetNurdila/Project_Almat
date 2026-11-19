@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мониторинг контейнеров</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.15.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<!-- Top bar -->
+<header id="topbar">
+  <button id="toggle-panel" type="button" title="Панель" aria-label="Свернуть панель">☰</button>
+  <span class="logo"><span aria-hidden="true">▣</span> BinMap</span>
+  <div id="stats">
+    <button id="stat-total" class="stat-card stat-all" type="button"><b>—</b><span>Всего</span></button>
+    <button id="stat-full" class="stat-card stat-full" type="button"><b>—</b><span>Требуют вывоза</span></button>
+    <button id="stat-off" class="stat-card stat-off" type="button"><b>—</b><span>Офлайн</span></button>
+  </div>
+  <button id="theme-toggle" class="icon-button" type="button" aria-label="Переключить тему" title="Тёмная тема">◐</button>
+</header>
+
+<!-- Left panel -->
+<aside id="panel">
+  <div id="panel-head"><div><h1>Контейнеры</h1><span id="panel-count">Загрузка…</span></div><button id="panel-expand" type="button" aria-label="Развернуть список">⌃</button></div>
+  <label class="search-box"><span aria-hidden="true">⌕</span><input id="bin-search" type="search" placeholder="Найти контейнер…" aria-label="Поиск контейнера"><kbd>/</kbd></label>
+  <nav id="filters" aria-label="Фильтр контейнеров">
+    <button type="button" class="filter-chip active" data-filter="all">Все</button>
+    <button type="button" class="filter-chip" data-filter="full">Полные</button>
+    <button type="button" class="filter-chip" data-filter="online">Онлайн</button>
+    <button type="button" class="filter-chip" data-filter="offline">Офлайн</button>
+  </nav>
+  <div id="list-status" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+  <ul id="bin-list" aria-label="Контейнеры"></ul>
+</aside>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Popup overlay -->
+<div id="popup-overlay" class="hidden">
+  <div id="popup-box">
+    <button id="popup-close" type="button" aria-label="Закрыть">✕</button>
+    <div id="popup-name"></div>
+    <div id="popup-meta"></div>
+    <div id="popup-progress" class="progress-track"><span></span></div>
+    <canvas id="history-chart" height="120"></canvas>
+    <a id="route-link" class="route-button" target="_blank" rel="noopener noreferrer">↗ Построить маршрут</a>
+  </div>
+</div>
+
+<div id="add-banner" class="hidden" role="status">＋ Кликните на карту, чтобы выбрать место <button type="button" id="banner-cancel">Отмена</button></div>
+<button id="btn-add" type="button" aria-label="Добавить контейнер">＋ Добавить контейнер</button>
+<div id="add-modal-overlay" class="hidden">
+  <form id="add-form" class="modal-box">
+    <h3>Новый контейнер</h3>
+    <button type="button" id="add-modal-close" class="modal-close" aria-label="Закрыть">✕</button>
+    <p class="modal-note">Поставьте точку на карте, затем заполните данные.</p>
+    <label>Название<input name="name" required maxlength="100" autocomplete="off"></label>
+    <label>Высота контейнера (см)<input name="height_cm" type="number" min="1" step="any" value="80" required></label>
+    <div class="modal-actions">
+      <button type="submit" class="save-button">Сохранить</button>
+      <button type="button" id="add-cancel">Отмена</button>
+    </div>
+  </form>
+</div>
+<div id="toast" role="alert" class="toast hidden"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.15.0/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.3/leaflet-maplibre-gl.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
